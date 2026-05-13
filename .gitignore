@@ -1,0 +1,20 @@
+# Data files — large, not tracked
+*.msgpack
+*_expanded.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Helper scripts
+convert_vive.py

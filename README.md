@@ -118,11 +118,27 @@ The algorithm runs in real time via a three-thread architecture:
 ## Repository Structure
 
 ```
+├── main.py                         # Offline analysis pipeline (load → calibrate → detect → evaluate → plot)
+├── offsets.json                    # Calibrated offsets (written by main.py, read by realtime_listener.py)
+├── scripts/
+│   └── realtime_listener.py        # Real-time pipeline: UDP → detect_step() → Dash + Tkinter
 ├── src/
-│   ├── analysis/           # Alice's offline analysis and calibration pipeline
-│   └── realtime/           # Guanjie's real-time detection system
+│   ├── io/
+│   │   ├── vive_loader.py          # VIVE CSV loader; msgpack → CSV conversion
+│   │   ├── mat_loader.py           # Pressure mat CSV loader; .txt → CSV conversion
+│   │   └── pose_stamped.py         # PoseStamped: coordinate transform, Z position, Y rotation
+│   ├── signal/
+│   │   ├── filters.py              # Offline (filtfilt) and real-time (lfilter) Butterworth filters
+│   │   └── transforms.py           # Quaternion → rotation matrix, lab frame, coordinate transform, event alignment
+│   ├── algorithm/
+│   │   ├── detector.py             # GaitEventDetector: detect() (offline) + detect_step() (real-time)
+│   │   └── calibration.py          # compute_offsets(), save_offsets(), load_offsets()
+│   ├── evaluation/
+│   │   └── metrics.py              # precision_recall(), timing_errors(), print_report()
+│   └── visualization/
+│       └── plots.py                # 2D/3D trajectory, position-with-events, detected vs ground truth
 ├── algorithms/
 │   ├── Real-Time Algorithm Pipeline.drawio   # Gait event detection flowchart
 │   └── Calibration Algorithm.drawio          # Calibration offset computation flowchart
-└── data/                   # Sample synchronized VIVE + pressure mat recordings
+└── data/                           # Sample synchronized VIVE + pressure mat recordings
 ```
